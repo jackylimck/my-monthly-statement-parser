@@ -19,28 +19,21 @@ public class App1 {
 
 		if (prop.size() > 0) {
 
+			// Process Simply Go Statement
 			String simplygoDir = prop.getProperty("simplygo.dir");
 			List<String> simplygoStmts = Arrays.asList(prop.getProperty("simplygo.stmt.list").split(","));
 
 			Double simplyGo = processSimplyGoStatements(simplygoDir, simplygoStmts);
 
-			System.out.println("---");
-			System.out.println(simplyGo);
-
+			// Process DBS Statement
 			String dbsDir = prop.getProperty("dbs.dir");
 			List<String> dbsStmtList = Arrays.asList(prop.getProperty("dbs.stmt.list").split(","));
 			String dbsKeyword = prop.getProperty("dbs.keyword");
 
 			Double dbsAltitude = processDBSAltitudeStatements(dbsDir, dbsStmtList, dbsKeyword);
-			System.out.println("---");
-			System.out.println(dbsAltitude);
 
-			System.out.println(Double.compare(simplyGo, dbsAltitude) == 0);
-			
-//			String revolutDir = prop.getProperty("revolut.dir");
-//			List<String> revolutStmts = Arrays.asList(prop.getProperty("revolut.stmt.list").split(","));
-			
-//			Double revolut = processRevolutStatements(revolutDir, revolutStmts)
+			// Comparison
+			 System.out.println(Double.compare(simplyGo, dbsAltitude) == 0);
 
 		} else {
 
@@ -57,7 +50,6 @@ public class App1 {
 
 		for (String input : inputFileNames) {
 			File file = new File(directory + input);
-
 			PDDocument doc = null;
 
 			try {
@@ -114,18 +106,17 @@ public class App1 {
 
 		Double totalGrab = 0.0;
 
-		// String outputFile = "C:\\Users\\JackyLimCK\\Desktop\\output.csv";
+		// String outputFile = "C:\\Users\\Jacky\\Desktop\\output.csv";
 
 		// BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-
-		PDDocument doc = null;
-
-		try {
-			for (String fileName : inputFileNames) {
-
-				File file = new File(directory + fileName);
-
-				doc = PDDocument.load(file);
+		
+		for (String input : inputFileNames) {
+			File file = new File(directory + input);
+			PDDocument doc = null;
+			
+			try {
+				
+				doc = PDDocument.load(file);				
 				PDFTextStripper pdfStripper = new PDFTextStripper();
 
 				String extractedText = pdfStripper.getText(doc);
@@ -180,18 +171,18 @@ public class App1 {
 				}
 
 				doc.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				doc.close();
+				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} finally {
+				try {
+					doc.close();					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-
 //		writer.flush();
 //		writer.close();
 
@@ -199,12 +190,6 @@ public class App1 {
 		System.out.println(String.format("DBS TOTAL: $%.2f", total));
 
 		return total;
-	}
-
-	private static Double processRevolutStatements(String directory, List<String> inputFileNames) {
-		
-		
-		return 0.0;
 	}
 	
 	private static Properties loadConfigFile() {
